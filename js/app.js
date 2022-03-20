@@ -1,5 +1,4 @@
 
-
 /** Class set up  */
 class Ship {
   constructor(name, size, direction='horizontal', firstIndex=[0,0], lastIndex=[0,0] ) {
@@ -21,12 +20,10 @@ const aiGridEl = document.querySelector('.aiGrid');
  * Set ids and classes for GRID
  */
 
- for (let row of playerGridEl.rows)
- {
-     for(let cell of row.cells)
-     {
-        cell.setAttribute('class', 'pgcell');
-     }
+ for (let row of playerGridEl.rows) {
+    for(let cell of row.cells) {
+      cell.setAttribute('class', 'pgcell');
+    }
  }
 
  for (let row of aiGridEl.rows) {
@@ -35,6 +32,7 @@ const aiGridEl = document.querySelector('.aiGrid');
      }
  }
 
+
 const howToPlayBtn = document.querySelector('#how-to-play');
 const welcomeMessageEl = document.querySelector('#welcome-message');
 const startEl = document.querySelector('#start');
@@ -42,6 +40,11 @@ const replayEl = document.querySelector('#replay');
 const gridEl = document.querySelector('.grid');
 const playerCellsEl = document.querySelectorAll('.pgcell');
 const aiCellsEl = document.querySelectorAll('.aicell');
+const longShipEl = document.querySelector('#ship1');
+const midShipEl = document.querySelector('#ship2');
+const shortShipEl = document.querySelector('#ship3');
+const draggables = document.querySelectorAll('.ship');
+
 
 /** States Declaration  */
 let shipSelected;
@@ -53,6 +56,29 @@ let playerGridHitIndex;
 howToPlayBtn.addEventListener('click', changePageWhenClicked);
 startEl.addEventListener('click', init);
 replayEl.addEventListener('click', handleReplayBtn);
+draggables.forEach(draggable => {
+  draggable.addEventListener('dragstart', dragStart);
+  draggable.addEventListener('dragend', dragEnd);
+});
+// longShipEl.addEventListener('dragstart', dragStart);
+// midShipEl.addEventListener('dragstart', dragStart);
+// shortShipEl.addEventListener('dragstart', dragStart);
+// longShipEl.addEventListener('dragend', dragEnd);
+// midShipEl.addEventListener('dragstend', dragEnd);
+// shortShipEl.addEventListener('dragend', dragEnd);
+//add EventListener for each cell
+playerCellsEl.forEach(cell => {
+  cell.addEventListener('dragenter', dragEnter);
+  cell.addEventListener('dragover', dragOver);
+  cell.addEventListener('dragleave', dragLeave);
+  cell.addEventListener('drop', drop);
+});
+aiCellsEl.forEach(cell => {
+  cell.addEventListener('dragenter', dragEnter);
+  cell.addEventListener('dragover', dragOver);
+  cell.addEventListener('dragleave', dragLeave);
+  cell.addEventListener('drop', drop);
+});
 
 // console.log(createPlayerGrid());
 // console.log(createAIGrid());
@@ -62,6 +88,52 @@ replayEl.addEventListener('click', handleReplayBtn);
 
 // console.dir(playerCellsEl);
 // controrllers
+
+// dragStart function
+function dragStart(e) {
+  //e.dataTransfer.setData('text/pain', e.target.id);
+  //e.target.classList.add('hide');
+  setTimeout(() => {
+    e.target.className += 'dragging';
+  }, 0);
+}
+function dragEnd(e) {
+  //e.dataTransfer.setData('text/pain', e.target.id);
+  //e.target.classList.add('hide');
+  setTimeout(() => {
+    e.target.className -= 'dragging';
+  }, 0);
+}
+
+/**
+ * Drop and Drag function declarations
+ *  dragEnter dragOver dragLeave drop
+ */
+
+function dragEnter(e) {
+  e.preventDefault();
+  e.target.className += 'drag-over';
+  console.log('working');
+}
+
+
+function dragOver(e) {
+  e.preventDefault();
+  e.target.className += 'drag-over';
+  console.log('dragOver')
+}
+
+function dragLeave(e) {
+  //e.preventDefault();
+  e.target.className -= 'drag-over';
+}
+
+function drop(e) {
+  //e.preventDefault();
+  e.target.className -= 'drag-over';
+}
+
+
 function init(e) {
   welcomeMessageEl.id = 'welcome-message';
 
@@ -128,8 +200,6 @@ function setAIGridAttributes() {
   }
 
 }
-
-
 
 const longShip = new Ship(3);
 const midShip = new Ship(2);

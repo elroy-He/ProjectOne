@@ -1,3 +1,11 @@
+.draggable .dragging {
+  opacity: 0.5;
+}
+
+.drag-over {
+  border: dashed 3px red;
+}
+
 body {
   display: grid;
   text-align: center;
