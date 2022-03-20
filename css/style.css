@@ -1,0 +1,83 @@
+body {
+  display: grid;
+  text-align: center;
+  background-image: url('https://wallpaperaccess.com/full/1486750.jpg');
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+.display > #welcome-message {
+  font-size: 25px;
+  color: purple;
+}
+
+/* .display > #game-instruction ::after{
+  font-size: 25px;
+  color: purple;
+} */
+
+.main {
+  display: flex;
+  justify-content: center;
+  height: 380px;
+}
+
+.container {
+  display: inline-flex;
+  flex-direction: column;
+  padding-right: 30px;
+  align-items: baseline;
+  justify-content: center;
+  border: 3px solid #666;
+  border-radius: .5em;
+  height: 150px;
+}
+
+.ship-block {
+  border: 1px solid black;
+  background-color: #670000;
+  gap: 0;
+  width: 30px;
+  height: 30px;
+}
+
+.ship {
+  display: flex;
+  padding: 10px;
+  cursor: move;
+}
+
+.grid {
+  display: flex;
+  justify-content: center;
+}
+
+.playerGrid{
+  padding-right: 10px;
+  padding-bottom: 0;
+  width: 450px;
+  height: 360px;
+}
+
+.aiGrid {
+  padding-left: 10px;
+  width: 450px;
+  height: 360px;
+}
+
+.pgcell {
+  display: inline-block;
+  border: 1px solid #19C52D;
+  background-color: #027910;
+  width: 40px;
+  height: 40px;
+}
+
+.aicell {
+  display: inline-block;
+  border: 1px solid #19C52D;
+  background-color: #027910;
+  width: 40px;
+  height: 40px;
+}
+
