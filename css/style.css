@@ -52,7 +52,6 @@ body {
 .ship {
   display: flex;
   padding: 10px;
-  cursor: move;
 }
 
 .grid {
