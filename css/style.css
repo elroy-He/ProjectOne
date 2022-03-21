@@ -47,22 +47,16 @@ body {
 }
 
 .ship-block-ship1 {
-  border: 1px solid black;
-  background-color: #670000;
   width: 90px;
   height: 30px;
 }
 
 .ship-block-ship2 {
-  border: 1px solid black;
-  background-color: #670000;
   width: 60px;
   height: 30px;
 }
 
 .ship-block-ship3 {
-  border: 1px solid black;
-  background-color: #670000;
   width: 30px;
   height: 30px;
 }
