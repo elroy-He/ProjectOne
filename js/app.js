@@ -13,6 +13,7 @@ class Ship {
   }
 }
 
+let playerSelectedInd = {};
 
 //Set the elements that I need to manipulate
 const playerGridEl = document.querySelector('.playerGrid');
@@ -47,7 +48,9 @@ const shortShipEl = document.querySelector('#ship3');
 const draggables = document.querySelectorAll('.ship');
 const horizontalEl = document.querySelector('#horizontal');
 const verticalEl = document.querySelector('#vertical');
-
+const finishPlacingEl = document.querySelector('#finish-placing');
+const playerShipInds = [];
+const aiShipInds = [];
 /** States Declaration  */
 let shipSelected;
 let playerGridShipIndex;
@@ -66,7 +69,7 @@ playerCellsEl.forEach(playerCell => {
 });
 horizontalEl.addEventListener('click', changeDirection);
 verticalEl.addEventListener('click', changeDirection);
-
+finishPlacingEl.addEventListener('click', addAIShips);
 
 // for (let row of playerGridEl.rows) {
 //   for(let cell of row.cells) {
@@ -83,6 +86,12 @@ const longShip = new Ship('longShip', 3);
 const midShip = new Ship('midShip', 2);
 const shortShip = new Ship('shortShip', 1);
 const ships = [longShip, midShip, shortShip];
+
+const longShipAI = new Ship('longShipAI', 3);
+const midShipAI = new Ship('midShipAI', 2);
+const shortShipAI = new Ship('shortShipAI', 1);
+const shipsAI = [shortShipAI, midShipAI, longShipAI];
+const directions = ['horizontal', 'vertical'];
 
 function changeChosenProperty(e) {
   if (e.target.className === 'ship-block-ship1') {
@@ -163,7 +172,7 @@ function addShip(e) {
         }
       } else {
         if (checkInBoundVertical(1, ind)) {
-          changeCellColorVerticals(1, ind);
+          changeCellColorVertical(1, ind);
           shortShip.placed = true;
         }
         else {
@@ -175,7 +184,63 @@ function addShip(e) {
   }
 }
 
+function addAIShips(e) {
+  shipsAI.forEach( ship => {
+    const num = Math.floor(Math.random() * 2);
+    ship.direction = directions[num];
+  });
+  let randInds = rndIndGenerator();
+  console.log(randInds);
 
+  let size = 1;
+  randInds.forEach(ind => {
+    if (shipsAI[size-1].direction === 'horizontal') {
+      if(isOverlap(e) === true) {
+        let newInd = [ Math.floor(Math.random() * 6),  Math.floor(Math.random() * 6)];
+        changeCellColorHorizontalAI(size, newInd);
+        shipsAI[size-1].placed = true;
+        shipsAI[size-1].firstIndex = newInd;
+        size++;
+        //continue for to check hit or sunk
+      } else {
+        changeCellColorHorizontalAI(size, ind);
+        shipsAI[size-1].placed = true;
+        shipsAI[size-1].firstIndex = ind;
+        size++;
+      }
+    }
+     else if (shipsAI[size-1].direction === 'vertical') {
+      if(isOverlap(e) === true) {
+        let newInd = [ Math.floor(Math.random() * 7),  Math.floor(Math.random() * 7)];
+        changeCellColorVerticalAI(size, newInd);
+        shipsAI[size-1].placed = true;
+        shipsAI[size-1].firstIndex = newInd;
+        size++;
+        //continue for to check hit or sunk
+      } else {
+        changeCellColorVerticalAI(size, ind);
+        shipsAI[size-1].placed = true;
+        shipsAI[size-1].firstIndex = ind;
+        size++;
+      }
+    }
+  });
+
+  for (let row of playerGridEl.rows) {
+    for(let cell of row.cells) {
+      cell.setAttribute('class', 'pgcell');
+      cell.style.backgroundColor = 'brown';
+    }
+ }
+
+ for (let row of aiGridEl.rows) {
+   for(let cell of row.cells) {
+     cell.setAttribute('class', 'aicell');
+     cell.style.backgroundColor = 'brown';
+     }
+ }
+  finishPlacingEl.disabled = true;
+}
 
 /**
  *
@@ -219,6 +284,9 @@ function changeCellColorHorizontal(num, index) {
       document.querySelector(`#p${text}`).style.backgroundColor = 'blue';
       document.querySelector(`#p${text}`).classList.add('taken');
     });
+    playerShipInds.push(index);
+    playerShipInds.push(nextInd);
+    playerShipInds.push(thirdInd);
   }
 
   if ( num === 2) {
@@ -233,8 +301,9 @@ function changeCellColorHorizontal(num, index) {
       document.querySelector(`#p${text}`).style.backgroundColor = 'blue';
       document.querySelector(`#p${text}`).classList.add('taken');
     });
+    playerShipInds.push(index);
+    playerShipInds.push(nextInd);
   }
-
 
   if ( num === 1) {
     // indexArr.push(index);
@@ -242,6 +311,60 @@ function changeCellColorHorizontal(num, index) {
     const text = indexName.toString();
     document.querySelector(`#p${text}`).style.backgroundColor = 'blue';
     document.querySelector(`#p${text}`).classList.add('taken');
+    playerShipInds.push(index);
+  }
+
+}
+
+function changeCellColorHorizontalAI(num, index) {
+  const indexArr = [];
+  const nextInd = [];
+  const thirdInd = [];
+  nextInd[0] = index[0];
+  nextInd[1] = index[1] + 1;
+  thirdInd[0] = index[0];
+  thirdInd[1] = index[1] + 2;
+
+  if ( num === 3) {
+    indexArr.push(index);
+    indexArr.push(nextInd);
+    indexArr.push(thirdInd);
+
+    indexArr.forEach(index => {
+      const idName = index.join('');
+      //console.log(idName);
+      const text = idName.toString();
+      document.querySelector(`#a${text}`).style.backgroundColor = 'red';
+      document.querySelector(`#a${text}`).classList.add('taken');
+    });
+    aiShipInds.push(index);
+    aiShipInds.push(nextInd);
+    aiShipInds.push(thirdInd);
+  }
+
+  if ( num === 2) {
+    indexArr.push(index);
+    indexArr.push(nextInd);
+
+    indexArr.forEach(index => {
+      const idName = index.join('');
+      console.log(idName);
+      const text = idName.toString();
+      //console.log(text);
+      document.querySelector(`#a${text}`).style.backgroundColor = 'red';
+      document.querySelector(`#a${text}`).classList.add('taken');
+    });
+      aiShipInds.push(index);
+      aiShipInds.push(nextInd);
+  }
+
+  if ( num === 1) {
+    // indexArr.push(index);
+    const indexName = index.join('');
+    const text = indexName.toString();
+    document.querySelector(`#a${text}`).style.backgroundColor = 'red';
+    document.querySelector(`#a${text}`).classList.add('taken');
+    aiShipInds.push(index);
   }
 
 }
@@ -266,7 +389,10 @@ function changeCellColorVertical(num, index) {
       const text = idName.toString();
       document.querySelector(`#p${text}`).style.backgroundColor = 'blue';
       document.querySelector(`#p${text}`).classList.add('taken');
-    });
+  });
+      playerShipInds.push(index);
+      playerShipInds.push(nextInd);
+      playerShipInds.push(thirdInd);
   }
 
   if ( num === 2) {
@@ -281,8 +407,9 @@ function changeCellColorVertical(num, index) {
       document.querySelector(`#p${text}`).style.backgroundColor = 'blue';
       document.querySelector(`#p${text}`).classList.add('taken');
     });
+      playerShipInds.push(index);
+      playerShipInds.push(nextInd);
   }
-
 
   if ( num === 1) {
     // indexArr.push(index);
@@ -290,12 +417,66 @@ function changeCellColorVertical(num, index) {
     const text = indexName.toString();
     document.querySelector(`#p${text}`).style.backgroundColor = 'blue';
     document.querySelector(`#p${text}`).classList.add('taken');
+    playerShipInds.push(index);
   }
 }
 
+function changeCellColorVerticalAI(num, index) {
+  const indexArr = [];
+  const nextInd = [];
+  const thirdInd = [];
+  nextInd[0] = index[0] + 1;
+  nextInd[1] = index[1];
+  thirdInd[0] = index[0] + 2;
+  thirdInd[1] = index[1];
+
+  if ( num === 3) {
+    indexArr.push(index);
+    indexArr.push(nextInd);
+    indexArr.push(thirdInd);
+
+    indexArr.forEach(index => {
+      const idName = index.join('');
+      //console.log(idName);
+      const text = idName.toString();
+      document.querySelector(`#a${text}`).style.backgroundColor = 'red';
+      document.querySelector(`#a${text}`).classList.add('taken');
+    });
+    aiShipInds.push(index);
+    aiShipInds.push(nextInd);
+    aiShipInds.push(thirdInd);
+  }
+
+  if ( num === 2) {
+    indexArr.push(index);
+    indexArr.push(nextInd);
+
+    indexArr.forEach(index => {
+      const idName = index.join('');
+      console.log(idName);
+      const text = idName.toString();
+      //console.log(text);
+      document.querySelector(`#a${text}`).style.backgroundColor = 'red';
+      document.querySelector(`#a${text}`).classList.add('taken');
+    });
+    aiShipInds.push(index);
+    aiShipInds.push(nextInd);
+  }
+
+  if ( num === 1) {
+    // indexArr.push(index);
+    const indexName = index.join('');
+    const text = indexName.toString();
+    document.querySelector(`#a${text}`).style.backgroundColor = 'red';
+    document.querySelector(`#a${text}`).classList.add('taken');
+    aiShipInds.push(index);
+
+  }
+}
 
 function isOverlap(e) {
   if (e.target.classList.contains('taken')) {
+    //console.log('overlap');
     return true;
   }
   return false;
@@ -313,6 +494,20 @@ function changeDirection(e) {
   }
 }
 
+//generate random numbers
+
+function rndIndGenerator(e) {
+  randInds = [];
+  longShipRand = [Math.floor(Math.random() * 6),  Math.floor(Math.random() * 6)];
+  midShipRand = [Math.floor(Math.random() * 6),  Math.floor(Math.random() * 6)];
+  shortShipRand = [Math.floor(Math.random() * 6),  Math.floor(Math.random() * 6)];
+  randInds.push(longShipRand);
+  randInds.push(midShipRand);
+  randInds.push(shortShipRand);
+  return randInds;
+}
+
+
 function init(e) {
   welcomeMessageEl.id = 'welcome-message';
 
@@ -321,6 +516,7 @@ function init(e) {
      for(let cell of row.cells)
      {
       cell.style.backgroundColor = '#027910';
+      cell.classList.remove('taken');
       //cell.style.border = '1px solid #19C52D'
      }
  }
@@ -329,10 +525,27 @@ function init(e) {
    for(let cell of row.cells) {
     cell.style.backgroundColor = '#027910';
     //cell.style.border = '1px solid #19C52D';
+    cell.classList.remove('taken');
      }
  }
+
+ ships.forEach(ship => {
+   ship.placed = false;
+   ship.direction = 'horizontal';
+   ship.chosen = false;
+ });
+
+ finishPlacingEl.disabled = false;
+
+ playerShipInds = [];
+ aiShipInds = [];
+ render();
+
 }
 
+function render(e) {
+  console.log('render works');
+}
 
 function handleReplayBtn(e) {
   init();

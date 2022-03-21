@@ -34,6 +34,10 @@ body {
   display: flex;
   flex-direction: column;
 }
+
+#finish-placing {
+  margin-top: 10px;
+}
 .container {
   display: inline-flex;
   flex-direction: column;
