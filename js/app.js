@@ -64,7 +64,7 @@ let playerShipInds = [];
 let playerShipsLeft = [];
 let aiShipInds = [];
 let aiShipsLeft = [];
-
+let messageEl = '';
 
 // Set up event listener
 howToPlayBtn.addEventListener('click', changePageWhenClicked);
@@ -125,14 +125,7 @@ function hitShip(e) {
     }
   }
     if (startGuess === true) {
-      if (aiShipsLeft.length === 0) {
-        console.log('You won');
-        return;
-      }
-      if (playerShipsLeft.length === 0) {
-        console.log('Computer won');
-        return;
-      }
+
       const indNum = randNum(allIndexes.length);
       //selected index
       const inde = allIndexes[indNum];
@@ -147,14 +140,16 @@ function hitShip(e) {
         const leftId = aiShipsLeft.indexOf(ind);
         aiShipsLeft.splice(leftId, 1);
         console.log(aiShipsLeft);
-
+        messageEl = 'You hit an AI ship !!'
+        render();
         //index in allIndexes
 
         if (document.querySelector(`#p${indeJoined}`).classList.contains('taken')) {
           document.querySelector(`#p${indeJoined}`).style.backgroundColor = 'black';
           const leftPId = playerShipsLeft.indexOf(inde);
           playerShipsLeft.splice(leftId, 1);
-          console.log(playerShipsLeft);
+          messageEl = 'You hit an AI ship !!'
+          render();
         }
       } else {
         if (document.querySelector(`#p${indeJoined}`).classList.contains('taken')) {
@@ -165,6 +160,17 @@ function hitShip(e) {
         return;
       }
     }
+    if (aiShipsLeft.length === 0) {
+      messageEl = 'Congrats You WON !!'
+      render();
+      return;
+    }
+    if (playerShipsLeft.length === 0) {
+      messageEl = 'Sorry You LOST !!'
+      render();
+      return;
+    }
+
   }
 }
 
@@ -205,24 +211,29 @@ function addShip(e) {
   ind[1] = parseInt(ind[1]);
   console.log(ind);
 
-  if(isOverlap(e)) return;
-  if (e.target.className === 'pgcell'){
+  if(isOverlap(e)) {
+    messageEl = 'Overlapped !';
+    return;
+  }
+   if (e.target.className === 'pgcell'){
     if ((longShip.chosen === true) && (longShip.placed === false)) {
       if (longShip.direction === 'horizontal') {
         if (checkInBoundHorizontal(3, ind)) {
           changeCellColorHorizontal(3, ind);
           longShip.placed = true;
+          messageEl = 'You placed your long ship HORIZONTALLY!'
         }
         else {
-          console.log('Outta Bound');
+          messageEl = 'Your ship will be out of bound !';
         }
       } else {
         if (checkInBoundVertical(3, ind)) {
           changeCellColorVertical(3, ind);
           longShip.placed = true;
+          messageEl = 'You placed your long ship VERTICALLY!'
         }
         else {
-          console.log('Outta Bound');
+          messageEl = 'Your ship will be out of bound !';
         }
         }
       }
@@ -232,17 +243,19 @@ function addShip(e) {
         if (checkInBoundHorizontal(2, ind)) {
           changeCellColorHorizontal(2, ind);
           midShip.placed = true;
+          messageEl = 'You placed your mid ship HORIZONTALLY!'
         }
         else {
-          console.log('Outta Bound miShip');
+          messageEl = 'Your ship will be out of bound !';
         }
       } else {
         if (checkInBoundVertical(2, ind)) {
           changeCellColorVertical(2, ind);
           midShip.placed = true;
+          messageEl = 'You placed your mid ship VERTICALLY!'
         }
         else {
-          console.log('Outta Bound');
+          messageEl = 'Your ship will be out of bound !';
         }
       }
 
@@ -254,21 +267,24 @@ function addShip(e) {
         if (checkInBoundHorizontal(1, ind)) {
           changeCellColorHorizontal(1, ind);
           shortShip.placed = true;
+          messageEl = 'You placed your short ship HORIZONTALLY!'
         }
         else {
-          console.log('Outta Bound');
+          messageEl = 'Your ship will be out of bound !';
         }
       } else {
         if (checkInBoundVertical(1, ind)) {
           changeCellColorVertical(1, ind);
           shortShip.placed = true;
+          messageEl = 'You placed your short ship VERTICALLY!'
         }
         else {
-          console.log('Outta bound')
+          messageEl = 'Your ship will be out of bound !';
         }
       }
 
     }
+    render();
   }
 }
 
@@ -277,6 +293,7 @@ function addAIShips(e) {
     const num = Math.floor(Math.random() * 2);
     ship.direction = directions[num];
   });
+
   let randInds = rndIndGenerator();
   console.log(randInds);
 
@@ -331,6 +348,9 @@ function addAIShips(e) {
   startGuess = true;
   playerShipsLeft = [...playerShipInds];
   aiShipsLeft = [...aiShipInds];
+
+  messageEl = 'You have finished placing your ships, Computer has also placed their ships now you can hit your oponent';
+  render();
 }
 
 /**
@@ -599,7 +619,7 @@ function rndIndGenerator(e) {
 }
 
 
-function init(e) {
+function init() {
   welcomeMessageEl.id = 'welcome-message';
 
  for (let row of playerGridEl.rows)
@@ -631,12 +651,14 @@ function init(e) {
  playerShipInds = [];
  aiShipInds = [];
  startGuess = false;
+ messageEl = 'Hello Welcome !';
  render();
 
 }
 
-function render(e) {
-  console.log('render works');
+function render() {
+  document.querySelector('#message').innerHTML = messageEl;
+  console.log(document.querySelector('#message').innerText);
 }
 
 function handleReplayBtn(e) {
