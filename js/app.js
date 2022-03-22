@@ -95,16 +95,19 @@ aiCellsEl.forEach(aiCell => {
 //   }
 // }
 
+
 const longShip = new Ship('longShip', 3);
 const midShip = new Ship('midShip', 2);
 const shortShip = new Ship('shortShip', 1);
 const ships = [longShip, midShip, shortShip];
+
 
 const longShipAI = new Ship('longShipAI', 3);
 const midShipAI = new Ship('midShipAI', 2);
 const shortShipAI = new Ship('shortShipAI', 1);
 const shipsAI = [shortShipAI, midShipAI, longShipAI];
 const directions = ['horizontal', 'vertical'];
+
 
 /**
  * This is for hitting ships on the ai grid
@@ -113,11 +116,29 @@ const directions = ['horizontal', 'vertical'];
  */
 
 function hitShip(e) {
+
+  let allIndexes = [];
+  for (let i=0; i<=8; i++) {
+    for (let j=0; j<=8; j++) {
+      const indexInd = [i,j];
+      allIndexes.push(indexInd);
+    }
+  }
     if (startGuess === true) {
-      if (aiShipsLeft === []) {
+      if (aiShipsLeft.length === 0) {
         console.log('You won');
         return;
       }
+      if (playerShipsLeft.length === 0) {
+        console.log('Computer won');
+        return;
+      }
+      const indNum = randNum(allIndexes.length);
+      //selected index
+      const inde = allIndexes[indNum];
+      //joined of selected index
+      const indeJoined = inde.join('').toString();
+      allIndexes.splice(indNum, 1);
       if (e.target.classList.contains('takenAI')) {
         e.target.style.backgroundColor = 'black';
         const id = parseInt((e.target.id).substring(1));
@@ -126,10 +147,37 @@ function hitShip(e) {
         const leftId = aiShipsLeft.indexOf(ind);
         aiShipsLeft.splice(leftId, 1);
         console.log(aiShipsLeft);
-      } else return;
+
+        //index in allIndexes
+
+        if (document.querySelector(`#p${indeJoined}`).classList.contains('taken')) {
+          document.querySelector(`#p${indeJoined}`).style.backgroundColor = 'black';
+          const leftPId = playerShipsLeft.indexOf(inde);
+          playerShipsLeft.splice(leftId, 1);
+          console.log(playerShipsLeft);
+        }
+      } else {
+        if (document.querySelector(`#p${indeJoined}`).classList.contains('taken')) {
+          document.querySelector(`#p${indeJoined}`).style.backgroundColor = 'black';
+          const leftPId = playerShipsLeft.indexOf(inde);
+          playerShipsLeft.splice(leftPId, 1);
+          console.log(playerShipsLeft);
+        return;
+      }
     }
+  }
 }
 
+/**
+ *  This can be combined with randIndGenerator
+ *  This generates a random index
+ */
+function randNum(num) {
+  return Math.floor(Math.random() * num);
+}
+function randInd() {
+  return [Math.floor(Math.random() * 10),Math.floor(Math.random() * 10)];
+}
 function changeChosenProperty(e) {
   if (e.target.className === 'ship-block-ship1') {
     longShip.chosen = true;
@@ -148,6 +196,7 @@ function changeChosenProperty(e) {
   }
 
 }
+
 
 function addShip(e) {
   const ind = `${e.target.id}`.split('');
@@ -198,6 +247,8 @@ function addShip(e) {
       }
 
     }
+
+
     if ((shortShip.chosen === true) && (shortShip.placed === false)) {
       if (shortShip.direction === 'horizontal') {
         if (checkInBoundHorizontal(1, ind)) {
