@@ -49,12 +49,21 @@ const draggables = document.querySelectorAll('.ship');
 const horizontalEl = document.querySelector('#horizontal');
 const verticalEl = document.querySelector('#vertical');
 const finishPlacingEl = document.querySelector('#finish-placing');
-const playerShipInds = [];
-const aiShipInds = [];
+// let playerShipInds = [];
+// let playerShipsLeft = [];
+// let aiShipInds = [];
+// let aiShipsLeft = [];
+
+
 /** States Declaration  */
 let shipSelected;
 let playerGridShipIndex;
 let playerGridHitIndex;
+let startGuess = false;
+let playerShipInds = [];
+let playerShipsLeft = [];
+let aiShipInds = [];
+let aiShipsLeft = [];
 
 
 // Set up event listener
@@ -70,6 +79,10 @@ playerCellsEl.forEach(playerCell => {
 horizontalEl.addEventListener('click', changeDirection);
 verticalEl.addEventListener('click', changeDirection);
 finishPlacingEl.addEventListener('click', addAIShips);
+
+aiCellsEl.forEach(aiCell => {
+  aiCell.addEventListener('click', hitShip);
+});
 
 // for (let row of playerGridEl.rows) {
 //   for(let cell of row.cells) {
@@ -92,6 +105,30 @@ const midShipAI = new Ship('midShipAI', 2);
 const shortShipAI = new Ship('shortShipAI', 1);
 const shipsAI = [shortShipAI, midShipAI, longShipAI];
 const directions = ['horizontal', 'vertical'];
+
+/**
+ * This is for hitting ships on the ai grid
+ * This will only happen when startGuess === true (after finish placing)
+ * And using start hitting ships on ai grid;
+ */
+
+function hitShip(e) {
+    if (startGuess === true) {
+      if (aiShipsLeft === []) {
+        console.log('You won');
+        return;
+      }
+      if (e.target.classList.contains('takenAI')) {
+        e.target.style.backgroundColor = 'black';
+        const id = parseInt((e.target.id).substring(1));
+        const ind = [Math.floor(id/10) , id%10];
+        //console.log(ind);
+        const leftId = aiShipsLeft.indexOf(ind);
+        aiShipsLeft.splice(leftId, 1);
+        console.log(aiShipsLeft);
+      } else return;
+    }
+}
 
 function changeChosenProperty(e) {
   if (e.target.className === 'ship-block-ship1') {
@@ -228,18 +265,21 @@ function addAIShips(e) {
 
   for (let row of playerGridEl.rows) {
     for(let cell of row.cells) {
-      cell.setAttribute('class', 'pgcell');
+      //cell.setAttribute('class', 'pgcell');
       cell.style.backgroundColor = 'brown';
     }
  }
 
  for (let row of aiGridEl.rows) {
    for(let cell of row.cells) {
-     cell.setAttribute('class', 'aicell');
+     //cell.setAttribute('class', 'aicell');
      cell.style.backgroundColor = 'brown';
      }
  }
   finishPlacingEl.disabled = true;
+  startGuess = true;
+  playerShipsLeft = [...playerShipInds];
+  aiShipsLeft = [...aiShipInds];
 }
 
 /**
@@ -335,7 +375,7 @@ function changeCellColorHorizontalAI(num, index) {
       //console.log(idName);
       const text = idName.toString();
       document.querySelector(`#a${text}`).style.backgroundColor = 'red';
-      document.querySelector(`#a${text}`).classList.add('taken');
+      document.querySelector(`#a${text}`).classList.add('takenAI');
     });
     aiShipInds.push(index);
     aiShipInds.push(nextInd);
@@ -352,7 +392,7 @@ function changeCellColorHorizontalAI(num, index) {
       const text = idName.toString();
       //console.log(text);
       document.querySelector(`#a${text}`).style.backgroundColor = 'red';
-      document.querySelector(`#a${text}`).classList.add('taken');
+      document.querySelector(`#a${text}`).classList.add('takenAI');
     });
       aiShipInds.push(index);
       aiShipInds.push(nextInd);
@@ -363,7 +403,7 @@ function changeCellColorHorizontalAI(num, index) {
     const indexName = index.join('');
     const text = indexName.toString();
     document.querySelector(`#a${text}`).style.backgroundColor = 'red';
-    document.querySelector(`#a${text}`).classList.add('taken');
+    document.querySelector(`#a${text}`).classList.add('takenAI');
     aiShipInds.push(index);
   }
 
@@ -440,7 +480,7 @@ function changeCellColorVerticalAI(num, index) {
       //console.log(idName);
       const text = idName.toString();
       document.querySelector(`#a${text}`).style.backgroundColor = 'red';
-      document.querySelector(`#a${text}`).classList.add('taken');
+      document.querySelector(`#a${text}`).classList.add('takenAI');
     });
     aiShipInds.push(index);
     aiShipInds.push(nextInd);
@@ -457,7 +497,7 @@ function changeCellColorVerticalAI(num, index) {
       const text = idName.toString();
       //console.log(text);
       document.querySelector(`#a${text}`).style.backgroundColor = 'red';
-      document.querySelector(`#a${text}`).classList.add('taken');
+      document.querySelector(`#a${text}`).classList.add('takenAI');
     });
     aiShipInds.push(index);
     aiShipInds.push(nextInd);
@@ -468,7 +508,7 @@ function changeCellColorVerticalAI(num, index) {
     const indexName = index.join('');
     const text = indexName.toString();
     document.querySelector(`#a${text}`).style.backgroundColor = 'red';
-    document.querySelector(`#a${text}`).classList.add('taken');
+    document.querySelector(`#a${text}`).classList.add('takenAI');
     aiShipInds.push(index);
 
   }
@@ -525,7 +565,7 @@ function init(e) {
    for(let cell of row.cells) {
     cell.style.backgroundColor = '#027910';
     //cell.style.border = '1px solid #19C52D';
-    cell.classList.remove('taken');
+    cell.classList.remove('takenAI');
      }
  }
 
@@ -539,6 +579,7 @@ function init(e) {
 
  playerShipInds = [];
  aiShipInds = [];
+ startGuess = false;
  render();
 
 }
