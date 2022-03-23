@@ -1,4 +1,4 @@
-/** Class set up  */
+
 class Ship {
   constructor(name, size, direction='horizontal', firstIndex=[0,0], lastIndex=[0,0], hit = false, sunk = false, chosen = false, placed = false) {
     this.name = name;
@@ -123,9 +123,10 @@ const directions = ['horizontal', 'vertical'];
    }
  }
 
+ //console.log(e.target.id.substring(1).split());
 function hitShip(e) {
 
-
+    console.log(aiShipsLeft);
     if (startGuess === true) {
 
       const indNum = randNum(allIndexe.length);
@@ -134,12 +135,25 @@ function hitShip(e) {
       //joined of selected index
       const indeJoined = inde.join('').toString();
       allIndexe.splice(indNum, 1);
-      if (e.target.classList.contains('takenAI')) {
+      const aiIndString = e.target.id.substring(1);
+      console.log(typeof aiIndString);
+      console.log(aiIndString);
+      const id = parseInt((e.target.id).substring(1));
+      const ind = [Math.floor(id/10) , id%10];
+     if (e.target.classList.contains('takenAI')) {
+       console.dir(ind);
+      // if(JSON.stringify(aiShipsLeft).indexOf(JSON.stringify(ind))>= 0){
         e.target.style.backgroundColor = 'black';
-        const id = parseInt((e.target.id).substring(1));
-        const ind = [Math.floor(id/10) , id%10];
+        // const id = parseInt((e.target.id).substring(1));
+        // const ind = [Math.floor(id/10) , id%10];
         //console.log(ind);
-        const leftId = aiShipsLeft.indexOf(ind);
+        let leftId = 0;
+        for (var i = 0; i < aiShipsLeft.length; i++) {
+          // This if statement depends on the format of your array
+          if (aiShipsLeft[i][0] == ind[0] && aiShipsLeft[i][1] == ind[1]) {
+              leftId = i;   // Found it
+          }
+      }
         console.dir(aiShipsLeft);
         messageEl = 'You hit an AI ship !!'
         aiShipsLeft.splice(leftId, 1);
@@ -156,7 +170,14 @@ function hitShip(e) {
           document.querySelector(`#p${indeJoined}`).style.backgroundColor = 'black';
           const id = parseInt((e.target.id).substring(1));
           const ind = [Math.floor(id/10) , id%10];
-          const leftPId = playerShipsLeft.indexOf(inde);
+          const leftPId = 0;
+          for (var i = 0; i < playerShipsLeft.length; i++) {
+            // This if statement depends on the format of your array
+            if (playerShipsLeft[i][0] == ind[0] && playerShipsLeft[i][1] == ind[1]) {
+                leftId = i;   // Found it
+            }
+        }
+
           playerShipsLeft.splice(leftPId, 1);
           messageEl = 'Your ship got hit!!'
           render();
@@ -182,8 +203,6 @@ function hitShip(e) {
         return;
       }
     }
-
-
 
   }
 }
@@ -244,7 +263,8 @@ function addShip(e) {
         else {
           messageEl = 'Your ship will be out of bound !';
         }
-      } else {
+      }
+      if (longShip.direction === 'vertical') {
         if (checkInBoundVertical(3, ind)) {
           changeCellColorVertical(3, ind);
           longShip.placed = true;
@@ -266,7 +286,8 @@ function addShip(e) {
         else {
           messageEl = 'Your ship will be out of bound !';
         }
-      } else {
+      }
+      if(midShip.direction === 'vertical') {
         if (checkInBoundVertical(2, ind)) {
           changeCellColorVertical(2, ind);
           midShip.placed = true;
@@ -290,7 +311,8 @@ function addShip(e) {
         else {
           messageEl = 'Your ship will be out of bound !';
         }
-      } else {
+      }
+      if (shortShip.direction === 'vertical') {
         if (checkInBoundVertical(1, ind)) {
           changeCellColorVertical(1, ind);
           shortShip.placed = true;
@@ -306,7 +328,7 @@ function addShip(e) {
   }
 }
 
-console.log(rndIndGenerator());
+//console.dir(rndIndGenerator());
 function addAIShips(e) {
   shipsAI.forEach( ship => {
     const num = Math.floor(Math.random() * 2);
@@ -345,6 +367,7 @@ function addAIShips(e) {
         changeCellColorVerticalAI(size, ind);
         shipsAI[size-1].placed = true;
         shipsAI[size-1].firstIndex = ind;
+        //document.querySelector()
         size++;
       }
     }
@@ -368,6 +391,8 @@ function addAIShips(e) {
   playerShipsLeft = [...playerShipInds];
   aiShipsLeft = [...aiShipInds];
 
+  console.dir(`players ${playerShipsLeft}`);
+  console.dir(`ais ${aiShipsLeft}`);
   messageEl = 'You have finished placing your ships, Computer has also placed their ships now you can hit your oponent';
   render();
 }
