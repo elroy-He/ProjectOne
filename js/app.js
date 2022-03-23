@@ -115,61 +115,75 @@ const directions = ['horizontal', 'vertical'];
  * And using start hitting ships on ai grid;
  */
 
+ let allIndexe = [];
+ for (let i=0; i<=8; i++) {
+   for (let j=0; j<=8; j++) {
+     const indexInd = [i,j];
+     allIndexe.push(indexInd);
+   }
+ }
+
 function hitShip(e) {
 
-  let allIndexes = [];
-  for (let i=0; i<=8; i++) {
-    for (let j=0; j<=8; j++) {
-      const indexInd = [i,j];
-      allIndexes.push(indexInd);
-    }
-  }
+
     if (startGuess === true) {
 
-      const indNum = randNum(allIndexes.length);
+      const indNum = randNum(allIndexe.length);
       //selected index
-      const inde = allIndexes[indNum];
+      const inde = allIndexe[indNum];
       //joined of selected index
       const indeJoined = inde.join('').toString();
-      allIndexes.splice(indNum, 1);
+      allIndexe.splice(indNum, 1);
       if (e.target.classList.contains('takenAI')) {
         e.target.style.backgroundColor = 'black';
         const id = parseInt((e.target.id).substring(1));
         const ind = [Math.floor(id/10) , id%10];
         //console.log(ind);
         const leftId = aiShipsLeft.indexOf(ind);
-        aiShipsLeft.splice(leftId, 1);
-        console.log(aiShipsLeft);
+        console.dir(aiShipsLeft);
         messageEl = 'You hit an AI ship !!'
+        aiShipsLeft.splice(leftId, 1);
         render();
         //index in allIndexes
+        if (aiShipsLeft.length === 0) {
+          messageEl = 'Congrats You WON !!';
+          render();
+          startGuess = false;
+          return;
+        }
 
         if (document.querySelector(`#p${indeJoined}`).classList.contains('taken')) {
           document.querySelector(`#p${indeJoined}`).style.backgroundColor = 'black';
+          const id = parseInt((e.target.id).substring(1));
+          const ind = [Math.floor(id/10) , id%10];
           const leftPId = playerShipsLeft.indexOf(inde);
-          playerShipsLeft.splice(leftId, 1);
-          messageEl = 'You hit an AI ship !!'
+          playerShipsLeft.splice(leftPId, 1);
+          messageEl = 'Your ship got hit!!'
           render();
+
+          if (playerShipsLeft.length === 0) {
+            messageEl = 'Sorry You LOST !!';
+            render();
+            startGuess = false;
+            return;
+          }
         }
-      } else {
+      }
+
+       else {
+        messageEl = 'You missed'
         if (document.querySelector(`#p${indeJoined}`).classList.contains('taken')) {
           document.querySelector(`#p${indeJoined}`).style.backgroundColor = 'black';
           const leftPId = playerShipsLeft.indexOf(inde);
           playerShipsLeft.splice(leftPId, 1);
-          console.log(playerShipsLeft);
+          console.dir(playerShipsLeft);
+          messageEl = 'Your ship got hit!!'
+          render();
         return;
       }
     }
-    if (aiShipsLeft.length === 0) {
-      messageEl = 'Congrats You WON !!'
-      render();
-      return;
-    }
-    if (playerShipsLeft.length === 0) {
-      messageEl = 'Sorry You LOST !!'
-      render();
-      return;
-    }
+
+
 
   }
 }
@@ -178,12 +192,15 @@ function hitShip(e) {
  *  This can be combined with randIndGenerator
  *  This generates a random index
  */
-function randNum(num) {
-  return Math.floor(Math.random() * num);
-}
+
 function randInd() {
   return [Math.floor(Math.random() * 10),Math.floor(Math.random() * 10)];
 }
+
+function randNum(num) {
+  return Math.floor(Math.random() * num);
+}
+
 function changeChosenProperty(e) {
   if (e.target.className === 'ship-block-ship1') {
     longShip.chosen = true;
@@ -213,6 +230,7 @@ function addShip(e) {
 
   if(isOverlap(e)) {
     messageEl = 'Overlapped !';
+    render();
     return;
   }
    if (e.target.className === 'pgcell'){
@@ -288,6 +306,7 @@ function addShip(e) {
   }
 }
 
+console.log(rndIndGenerator());
 function addAIShips(e) {
   shipsAI.forEach( ship => {
     const num = Math.floor(Math.random() * 2);
@@ -388,32 +407,36 @@ function changeCellColorHorizontal(num, index) {
     indexArr.push(nextInd);
     indexArr.push(thirdInd);
 
-    indexArr.forEach(index => {
-      const idName = index.join('');
+    playerShipInds.push(index);
+    playerShipInds.push(nextInd);
+    playerShipInds.push(thirdInd);
+
+    indexArr.forEach(ind => {
+      const idName = ind.join('');
       //console.log(idName);
       const text = idName.toString();
       document.querySelector(`#p${text}`).style.backgroundColor = 'blue';
       document.querySelector(`#p${text}`).classList.add('taken');
     });
-    playerShipInds.push(index);
-    playerShipInds.push(nextInd);
-    playerShipInds.push(thirdInd);
+
+    console.dir(playerShipInds);
   }
 
   if ( num === 2) {
     indexArr.push(index);
     indexArr.push(nextInd);
 
-    indexArr.forEach(index => {
-      const idName = index.join('');
+    playerShipInds.push(index);
+    playerShipInds.push(nextInd);
+    indexArr.forEach(ind => {
+      const idName = ind.join('');
       console.log(idName);
       const text = idName.toString();
       //console.log(text);
       document.querySelector(`#p${text}`).style.backgroundColor = 'blue';
       document.querySelector(`#p${text}`).classList.add('taken');
     });
-    playerShipInds.push(index);
-    playerShipInds.push(nextInd);
+    console.dir(playerShipInds);
   }
 
   if ( num === 1) {
@@ -423,7 +446,9 @@ function changeCellColorHorizontal(num, index) {
     document.querySelector(`#p${text}`).style.backgroundColor = 'blue';
     document.querySelector(`#p${text}`).classList.add('taken');
     playerShipInds.push(index);
+    console.dir(playerShipInds);
   }
+
 
 }
 
@@ -445,7 +470,8 @@ function changeCellColorHorizontalAI(num, index) {
       const idName = index.join('');
       //console.log(idName);
       const text = idName.toString();
-      document.querySelector(`#a${text}`).style.backgroundColor = 'red';
+      console.log(text);
+      //document.querySelector(`#a${text}`).style.backgroundColor = 'red';
       document.querySelector(`#a${text}`).classList.add('takenAI');
     });
     aiShipInds.push(index);
@@ -477,7 +503,7 @@ function changeCellColorHorizontalAI(num, index) {
     document.querySelector(`#a${text}`).classList.add('takenAI');
     aiShipInds.push(index);
   }
-
+  console.dir(aiShipInds);
 }
 
 function changeCellColorVertical(num, index) {
@@ -504,6 +530,7 @@ function changeCellColorVertical(num, index) {
       playerShipInds.push(index);
       playerShipInds.push(nextInd);
       playerShipInds.push(thirdInd);
+      console.dir(playerShipInds);
   }
 
   if ( num === 2) {
@@ -520,6 +547,7 @@ function changeCellColorVertical(num, index) {
     });
       playerShipInds.push(index);
       playerShipInds.push(nextInd);
+      console.dir(playerShipInds);
   }
 
   if ( num === 1) {
@@ -529,8 +557,10 @@ function changeCellColorVertical(num, index) {
     document.querySelector(`#p${text}`).style.backgroundColor = 'blue';
     document.querySelector(`#p${text}`).classList.add('taken');
     playerShipInds.push(index);
+    console.dir(playerShipInds);
   }
 }
+
 
 function changeCellColorVerticalAI(num, index) {
   const indexArr = [];
@@ -581,8 +611,8 @@ function changeCellColorVerticalAI(num, index) {
     document.querySelector(`#a${text}`).style.backgroundColor = 'red';
     document.querySelector(`#a${text}`).classList.add('takenAI');
     aiShipInds.push(index);
-
   }
+  console.dir(aiShipInds);
 }
 
 function isOverlap(e) {
@@ -607,11 +637,25 @@ function changeDirection(e) {
 
 //generate random numbers
 
-function rndIndGenerator(e) {
+function rndIndGenerator() {
   randInds = [];
-  longShipRand = [Math.floor(Math.random() * 6),  Math.floor(Math.random() * 6)];
-  midShipRand = [Math.floor(Math.random() * 6),  Math.floor(Math.random() * 6)];
-  shortShipRand = [Math.floor(Math.random() * 6),  Math.floor(Math.random() * 6)];
+  let allIndexes = [];
+  for (let i=0; i<=6; i++) {
+    for (let j=0; j<=6; j++) {
+      const indexInd = [i,j];
+      allIndexes.push(indexInd);
+    }
+  }
+  const num1 = Math.floor(Math.random() * allIndexes.length);
+  const longShipRand = allIndexes[num1];
+  allIndexes.splice(num1, 1);
+  const num2 = Math.floor(Math.random() * allIndexes.length);
+  const midShipRand = allIndexes[num2];
+  allIndexes.splice(num2, 1);
+  const num3 = Math.floor(Math.random() * allIndexes.length);
+  const shortShipRand = allIndexes[num3];
+  allIndexes.splice(num3, 1);
+
   randInds.push(longShipRand);
   randInds.push(midShipRand);
   randInds.push(shortShipRand);
@@ -706,5 +750,3 @@ function changePageWhenClicked(e) {
 //   }
 
 // }
-
-
