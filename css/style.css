@@ -20,6 +20,12 @@
   font-size: 30px;
 }
 
+#how-to-play {
+  background-color: hsl(30, 100%, 50%);
+  padding: .5em 1em;
+  margin-top: 10px;
+  font-size: 1rem;
+}
 .display {
   display: flex;
   flex-direction: column;
@@ -31,19 +37,18 @@ body {
   display: grid;
   text-align: center;
   background-image: url('https://wallpaperaccess.com/full/1486750.jpg');
-  background-repeat: no-repeat;
   background-size: cover;
+  background-repeat: no-repeat;
+  overflow-x: hidden;
+  font-family: 'Lobster', cursive;
 }
+
 
 .display > #welcome-message  {
   font-size: 25px;
   color: purple;
 }
 
-/* .display > #game-instruction ::after{
-  font-size: 25px;
-  color: purple;
-} */
 
 .main {
   display: flex;
@@ -51,45 +56,79 @@ body {
   height: 380px;
 }
 
+
 .left-side {
   display: flex;
   flex-direction: column;
 }
 
-#finish-placing {
+#horizontal {
+  background-color: hsl(30, 100%, 50%);
+  padding: .5em 1em;
   margin-top: 10px;
+  font-size: 0.7rem;
 }
+
+#vertical {
+  background-color: hsl(30, 100%, 50%);
+  padding: .5em 1em;
+  margin-top: 10px;
+  font-size: 0.7rem;
+}
+
+#finish-placing {
+  background-color: hsl(30, 100%, 50%);
+  padding: .5em 1em;
+  margin-top: 10px;
+  font-size: 1rem;
+}
+
+
 .container {
   display: inline-flex;
   flex-direction: column;
   padding-right: 30px;
   align-items: baseline;
   justify-content: center;
-  border: 3px solid #666;
+  border: 3px solid #F3F3F3;
   border-radius: .5em;
   height: 150px;
   margin-bottom: 30px;
 }
 
+
 .ship-block-ship1 {
   width: 90px;
   height: 30px;
+  opacity: 0.7
+}
+.ship-block-ship1:hover {
+  opacity: 1.0;
 }
 
 .ship-block-ship2 {
   width: 60px;
   height: 30px;
+  opacity: 0.7
+}
+.ship-block-ship2:hover {
+  opacity: 1.0;
 }
 
 .ship-block-ship3 {
   width: 30px;
   height: 30px;
+  opacity: 0.7
+}
+.ship-block-ship3:hover {
+  opacity: 1.0;
 }
 
 .ship {
   display: flex;
   padding: 10px;
 }
+
 
 .grid {
   display: flex;
@@ -111,17 +150,31 @@ body {
 
 .pgcell {
   display: inline-block;
-  border: 1px solid #19C52D;
-  background-color: #027910;
+  border: 1px solid black;
+  background-color: #DC86FA;
   width: 40px;
   height: 40px;
 }
 
 .aicell {
   display: inline-block;
-  border: 1px solid #19C52D;
-  background-color: #027910;
+  border: 1px solid black;
+  background-color: #DC86FA;
   width: 40px;
   height: 40px;
+
 }
 
+#start {
+  background-color: hsl(30, 100%, 50%);
+  padding: .5em 1em;
+  margin-top: 10px;
+  font-size: 1rem;
+}
+
+#replay {
+  background-color: hsl(30, 100%, 50%);
+  padding: .5em 1em;
+  margin-top: 10px;
+  font-size: 1rem;
+}

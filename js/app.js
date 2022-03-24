@@ -34,7 +34,6 @@ const aiGridEl = document.querySelector('.aiGrid');
      }
  }
 
-
 const howToPlayBtn = document.querySelector('#how-to-play');
 const welcomeMessageEl = document.querySelector('#welcome-message');
 const startEl = document.querySelector('#start');
@@ -69,7 +68,7 @@ let messageEl = '';
 // Set up event listener
 howToPlayBtn.addEventListener('click', changePageWhenClicked);
 startEl.addEventListener('click', init);
-replayEl.addEventListener('click', handleReplayBtn);
+replayEl.addEventListener('click', init);
 longShipEl.addEventListener('click', changeChosenProperty);
 midShipEl.addEventListener('click', changeChosenProperty);
 shortShipEl.addEventListener('click', changeChosenProperty);
@@ -127,7 +126,18 @@ const directions = ['horizontal', 'vertical'];
 function hitShip(e) {
 
     if ((startGuess === true) && (e.target.classList.contains('aicell'))) {
-
+      if (aiShipsLeft.length === 0) {
+        messageEl = 'Congrats You WON !!';
+        render();
+        startGuess = false;
+        return;
+      }
+      if (playerShipsLeft.length === 0) {
+        messageEl = 'Sorry You LOST !!';
+        render();
+        startGuess = false;
+        return;
+      }
 
       const indNum = randNum(allIndexe.length);
       //selected index
@@ -145,11 +155,11 @@ function hitShip(e) {
         let leftId = 0;
         for (var i = 0; i < aiShipsLeft.length; i++) {
           // This if statement depends on the format of your array
-          if (aiShipsLeft[i][0] == ind[0] && aiShipsLeft[i][1] == ind[1]) {
+          if (aiShipsLeft[i][0] === ind[0] && aiShipsLeft[i][1] === ind[1]) {
               leftId = i;   // Found it
           }
       }
-
+        console.log('aiSHipsLeft');
         console.dir(aiShipsLeft);
         messageEl = 'You hit an AI ship !!'
         aiShipsLeft.splice(leftId, 1);
@@ -171,16 +181,18 @@ function hitShip(e) {
           playerShipsLeft.splice(leftPId, 1);
           messageEl = 'Your ship got hit!!'
           render();
-
+          console.log('playerSHipsLest');
+          console.dir(playerShipsLeft);
         }
       }
 
-       if(!e.target.classList.contains('takenAI')) {
+       if(e.target.classList.contains('takenAI') === false) {
         messageEl = 'You missed'
         if (document.querySelector(`#p${indeJoined}`).classList.contains('taken')) {
           document.querySelector(`#p${indeJoined}`).style.backgroundColor = 'black';
           const leftPId = playerShipsLeft.indexOf(inde);
           playerShipsLeft.splice(leftPId, 1);
+          console.log('playerSHipsLest');
           console.dir(playerShipsLeft);
           messageEl = 'Your ship got hit!!'
           render();
@@ -189,18 +201,7 @@ function hitShip(e) {
     }
 
   }
-  if (aiShipsLeft.length === 0) {
-    messageEl = 'Congrats You WON !!';
-    render();
-    startGuess = false;
-    return;
-  }
-  if (playerShipsLeft.length === 0) {
-    messageEl = 'Sorry You LOST !!';
-    render();
-    startGuess = false;
-    return;
-  }
+
 }
 
 /**
@@ -293,7 +294,6 @@ function addShip(e) {
           messageEl = 'Your ship will be out of bound !';
         }
       }
-
     }
 
 
@@ -616,6 +616,9 @@ function isOverlap(e) {
   if (e.target.classList.contains('taken')) {
     return true;
   }
+  else if(e.target.classList.contains('takenAI')){
+    return true;
+  }
   return false;
 }
 
@@ -688,10 +691,17 @@ function init() {
 
  playerShipInds = [];
  aiShipInds = [];
+ playerShipsLeft = [];
+ aiShipsLeft = [];
  startGuess = false;
  messageEl = 'Hello Welcome !';
  render();
-
+ for (let i=0; i<=8; i++) {
+  for (let j=0; j<=8; j++) {
+    const indexInd = [i,j];
+    allIndexe.push(indexInd);
+  }
+}
 }
 
 function render() {
