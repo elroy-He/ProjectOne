@@ -123,11 +123,11 @@ const directions = ['horizontal', 'vertical'];
    }
  }
 
- //console.log(e.target.id.substring(1).split());
+
 function hitShip(e) {
 
-    console.log(aiShipsLeft);
-    if (startGuess === true) {
+    if ((startGuess === true) && (e.target.classList.contains('aicell'))) {
+
 
       const indNum = randNum(allIndexe.length);
       //selected index
@@ -136,17 +136,12 @@ function hitShip(e) {
       const indeJoined = inde.join('').toString();
       allIndexe.splice(indNum, 1);
       const aiIndString = e.target.id.substring(1);
-      console.log(typeof aiIndString);
-      console.log(aiIndString);
+
       const id = parseInt((e.target.id).substring(1));
       const ind = [Math.floor(id/10) , id%10];
      if (e.target.classList.contains('takenAI')) {
        console.dir(ind);
-      // if(JSON.stringify(aiShipsLeft).indexOf(JSON.stringify(ind))>= 0){
         e.target.style.backgroundColor = 'black';
-        // const id = parseInt((e.target.id).substring(1));
-        // const ind = [Math.floor(id/10) , id%10];
-        //console.log(ind);
         let leftId = 0;
         for (var i = 0; i < aiShipsLeft.length; i++) {
           // This if statement depends on the format of your array
@@ -154,17 +149,12 @@ function hitShip(e) {
               leftId = i;   // Found it
           }
       }
+
         console.dir(aiShipsLeft);
         messageEl = 'You hit an AI ship !!'
         aiShipsLeft.splice(leftId, 1);
         render();
-        //index in allIndexes
-        if (aiShipsLeft.length === 0) {
-          messageEl = 'Congrats You WON !!';
-          render();
-          startGuess = false;
-          return;
-        }
+
 
         if (document.querySelector(`#p${indeJoined}`).classList.contains('taken')) {
           document.querySelector(`#p${indeJoined}`).style.backgroundColor = 'black';
@@ -172,9 +162,9 @@ function hitShip(e) {
           const ind = [Math.floor(id/10) , id%10];
           const leftPId = 0;
           for (var i = 0; i < playerShipsLeft.length; i++) {
-            // This if statement depends on the format of your array
+
             if (playerShipsLeft[i][0] == ind[0] && playerShipsLeft[i][1] == ind[1]) {
-                leftId = i;   // Found it
+                leftPId = i;
             }
         }
 
@@ -182,16 +172,10 @@ function hitShip(e) {
           messageEl = 'Your ship got hit!!'
           render();
 
-          if (playerShipsLeft.length === 0) {
-            messageEl = 'Sorry You LOST !!';
-            render();
-            startGuess = false;
-            return;
-          }
         }
       }
 
-       else {
+       if(!e.target.classList.contains('takenAI')) {
         messageEl = 'You missed'
         if (document.querySelector(`#p${indeJoined}`).classList.contains('taken')) {
           document.querySelector(`#p${indeJoined}`).style.backgroundColor = 'black';
@@ -204,6 +188,18 @@ function hitShip(e) {
       }
     }
 
+  }
+  if (aiShipsLeft.length === 0) {
+    messageEl = 'Congrats You WON !!';
+    render();
+    startGuess = false;
+    return;
+  }
+  if (playerShipsLeft.length === 0) {
+    messageEl = 'Sorry You LOST !!';
+    render();
+    startGuess = false;
+    return;
   }
 }
 
@@ -391,8 +387,6 @@ function addAIShips(e) {
   playerShipsLeft = [...playerShipInds];
   aiShipsLeft = [...aiShipInds];
 
-  console.dir(`players ${playerShipsLeft}`);
-  console.dir(`ais ${aiShipsLeft}`);
   messageEl = 'You have finished placing your ships, Computer has also placed their ships now you can hit your oponent';
   render();
 }
@@ -438,13 +432,11 @@ function changeCellColorHorizontal(num, index) {
 
     indexArr.forEach(ind => {
       const idName = ind.join('');
-      //console.log(idName);
       const text = idName.toString();
       document.querySelector(`#p${text}`).style.backgroundColor = 'blue';
       document.querySelector(`#p${text}`).classList.add('taken');
     });
 
-    console.dir(playerShipInds);
   }
 
   if ( num === 2) {
@@ -455,13 +447,11 @@ function changeCellColorHorizontal(num, index) {
     playerShipInds.push(nextInd);
     indexArr.forEach(ind => {
       const idName = ind.join('');
-      console.log(idName);
+
       const text = idName.toString();
-      //console.log(text);
       document.querySelector(`#p${text}`).style.backgroundColor = 'blue';
       document.querySelector(`#p${text}`).classList.add('taken');
     });
-    console.dir(playerShipInds);
   }
 
   if ( num === 1) {
@@ -471,7 +461,6 @@ function changeCellColorHorizontal(num, index) {
     document.querySelector(`#p${text}`).style.backgroundColor = 'blue';
     document.querySelector(`#p${text}`).classList.add('taken');
     playerShipInds.push(index);
-    console.dir(playerShipInds);
   }
 
 
@@ -493,10 +482,7 @@ function changeCellColorHorizontalAI(num, index) {
 
     indexArr.forEach(index => {
       const idName = index.join('');
-      //console.log(idName);
       const text = idName.toString();
-      console.log(text);
-      //document.querySelector(`#a${text}`).style.backgroundColor = 'red';
       document.querySelector(`#a${text}`).classList.add('takenAI');
     });
     aiShipInds.push(index);
@@ -510,9 +496,8 @@ function changeCellColorHorizontalAI(num, index) {
 
     indexArr.forEach(index => {
       const idName = index.join('');
-      console.log(idName);
       const text = idName.toString();
-      //console.log(text);
+
       document.querySelector(`#a${text}`).style.backgroundColor = 'red';
       document.querySelector(`#a${text}`).classList.add('takenAI');
     });
@@ -521,7 +506,6 @@ function changeCellColorHorizontalAI(num, index) {
   }
 
   if ( num === 1) {
-    // indexArr.push(index);
     const indexName = index.join('');
     const text = indexName.toString();
     document.querySelector(`#a${text}`).style.backgroundColor = 'red';
@@ -547,7 +531,6 @@ function changeCellColorVertical(num, index) {
 
     indexArr.forEach(index => {
       const idName = index.join('');
-      //console.log(idName);
       const text = idName.toString();
       document.querySelector(`#p${text}`).style.backgroundColor = 'blue';
       document.querySelector(`#p${text}`).classList.add('taken');
@@ -555,7 +538,6 @@ function changeCellColorVertical(num, index) {
       playerShipInds.push(index);
       playerShipInds.push(nextInd);
       playerShipInds.push(thirdInd);
-      console.dir(playerShipInds);
   }
 
   if ( num === 2) {
@@ -564,25 +546,20 @@ function changeCellColorVertical(num, index) {
 
     indexArr.forEach(index => {
       const idName = index.join('');
-      console.log(idName);
       const text = idName.toString();
-      //console.log(text);
       document.querySelector(`#p${text}`).style.backgroundColor = 'blue';
       document.querySelector(`#p${text}`).classList.add('taken');
     });
       playerShipInds.push(index);
       playerShipInds.push(nextInd);
-      console.dir(playerShipInds);
   }
 
   if ( num === 1) {
-    // indexArr.push(index);
     const indexName = index.join('');
     const text = indexName.toString();
     document.querySelector(`#p${text}`).style.backgroundColor = 'blue';
     document.querySelector(`#p${text}`).classList.add('taken');
     playerShipInds.push(index);
-    console.dir(playerShipInds);
   }
 }
 
@@ -603,7 +580,6 @@ function changeCellColorVerticalAI(num, index) {
 
     indexArr.forEach(index => {
       const idName = index.join('');
-      //console.log(idName);
       const text = idName.toString();
       document.querySelector(`#a${text}`).style.backgroundColor = 'red';
       document.querySelector(`#a${text}`).classList.add('takenAI');
@@ -619,9 +595,7 @@ function changeCellColorVerticalAI(num, index) {
 
     indexArr.forEach(index => {
       const idName = index.join('');
-      console.log(idName);
       const text = idName.toString();
-      //console.log(text);
       document.querySelector(`#a${text}`).style.backgroundColor = 'red';
       document.querySelector(`#a${text}`).classList.add('takenAI');
     });
@@ -630,19 +604,16 @@ function changeCellColorVerticalAI(num, index) {
   }
 
   if ( num === 1) {
-    // indexArr.push(index);
     const indexName = index.join('');
     const text = indexName.toString();
     document.querySelector(`#a${text}`).style.backgroundColor = 'red';
     document.querySelector(`#a${text}`).classList.add('takenAI');
     aiShipInds.push(index);
   }
-  console.dir(aiShipInds);
 }
 
 function isOverlap(e) {
   if (e.target.classList.contains('taken')) {
-    //console.log('overlap');
     return true;
   }
   return false;
@@ -697,14 +668,12 @@ function init() {
      {
       cell.style.backgroundColor = '#027910';
       cell.classList.remove('taken');
-      //cell.style.border = '1px solid #19C52D'
      }
  }
 
  for (let row of aiGridEl.rows) {
    for(let cell of row.cells) {
     cell.style.backgroundColor = '#027910';
-    //cell.style.border = '1px solid #19C52D';
     cell.classList.remove('takenAI');
      }
  }
@@ -727,7 +696,6 @@ function init() {
 
 function render() {
   document.querySelector('#message').innerHTML = messageEl;
-  console.log(document.querySelector('#message').innerText);
 }
 
 function handleReplayBtn(e) {
