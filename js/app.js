@@ -1,4 +1,3 @@
-
 class Ship {
   constructor(name, size, direction='horizontal', firstIndex=[0,0], lastIndex=[0,0], hit = false, sunk = false, chosen = false, placed = false) {
     this.name = name;
@@ -13,7 +12,6 @@ class Ship {
   }
 }
 
-let playerSelectedInd = {};
 
 //Set the elements that I need to manipulate
 const playerGridEl = document.querySelector('.playerGrid');
@@ -124,20 +122,7 @@ const directions = ['horizontal', 'vertical'];
 
 
 function hitShip(e) {
-
     if ((startGuess === true) && (e.target.classList.contains('aicell'))) {
-      if (aiShipsLeft.length === 0) {
-        messageEl = 'Congrats You WON !!';
-        render();
-        startGuess = false;
-        return;
-      }
-      if (playerShipsLeft.length === 0) {
-        messageEl = 'Sorry You LOST !!';
-        render();
-        startGuess = false;
-        return;
-      }
 
       const indNum = randNum(allIndexe.length);
       //selected index
@@ -172,7 +157,6 @@ function hitShip(e) {
           const ind = [Math.floor(id/10) , id%10];
           const leftPId = 0;
           for (var i = 0; i < playerShipsLeft.length; i++) {
-
             if (playerShipsLeft[i][0] == ind[0] && playerShipsLeft[i][1] == ind[1]) {
                 leftPId = i;
             }
@@ -199,9 +183,19 @@ function hitShip(e) {
         return;
       }
     }
-
+    if (aiShipsLeft.length === 0) {
+      messageEl = 'Congrats You WON !!';
+      render();
+      startGuess = false;
+      return;
+    }
+    if (playerShipsLeft.length === 0) {
+      messageEl = 'Sorry You LOST !!';
+      render();
+      startGuess = false;
+      return;
+    }
   }
-
 }
 
 /**
@@ -718,38 +712,3 @@ function changePageWhenClicked(e) {
   welcomeMessageEl.style.color = 'purple';
   welcomeMessageEl.style.fontSize = '25px';
 }
-
-
-// function createPlayerGrid() {
-
-//   for (let i=0; i<9; i++) {
-//     const row = document.createElement('div');
-//     row.setAttribute('class', `row${i}`);
-//     playerGridEl.appendChild(row);
-//     for (let j=0; j<9; j++) {
-//       const grid = document.createElement("span");
-//       grid.innerHTML = `${i}${j}`;
-//       grid.setAttribute("id", `playerGrid${i}${j}`);
-//       grid.setAttribute("class", `pg-cell`);
-//       row.appendChild(grid);
-//     }
-//   }
-//   //console.log(playerGridEl);
-//   // return playerGridEl;
-// }
-
-
-// function setAIGridAttributes() {
-//   for (let i=0; i<9; i++) {
-//     row.setAttribute('class', `row${i}`);
-//     aiGridEl.appendChild(row);
-//     for (let j=0; j<9; j++) {
-//       const grid = document.createElement("span");
-//       grid.innerHTML = `${i}${j}`;
-//       grid.setAttribute("id", `aiGrid${i}${j}`);
-//       grid.setAttribute("class", `ai-cell`);
-//       row.appendChild(grid);
-//     }
-//   }
-
-// }

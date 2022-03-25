@@ -9,20 +9,20 @@
 .message-display {
   width: 450px;
   height: 120px;
-  background-color: rgba(40, 147 , 241, 0.4);
+  background-color: rgba(40, 147, 241, 0.4);
   margin-top: 20px;
   margin-bottom: 25px;
   text-align: center;
   display: flex;
   justify-content: center;
   align-items: center;
-  font-family: 'Lobster', cursive;
+  font-family: "Lobster", cursive;
   font-size: 30px;
 }
 
 #how-to-play {
   background-color: hsl(30, 100%, 50%);
-  padding: .5em 1em;
+  padding: 0.5em 1em;
   margin-top: 10px;
   font-size: 1rem;
 }
@@ -32,30 +32,26 @@
   align-items: center;
 }
 
-
 body {
   display: grid;
   text-align: center;
-  background-image: url('https://wallpaperaccess.com/full/1486750.jpg');
+  background-image: url("https://wallpaperaccess.com/full/1486750.jpg");
   background-size: cover;
   background-repeat: no-repeat;
   overflow-x: hidden;
-  font-family: 'Lobster', cursive;
+  font-family: "Lobster", cursive;
 }
 
-
-.display > #welcome-message  {
+.display > #welcome-message {
   font-size: 25px;
   color: purple;
 }
-
 
 .main {
   display: flex;
   justify-content: center;
   height: 380px;
 }
-
 
 .left-side {
   display: flex;
@@ -64,25 +60,24 @@ body {
 
 #horizontal {
   background-color: hsl(30, 100%, 50%);
-  padding: .5em 1em;
+  padding: 0.5em 1em;
   margin-top: 10px;
   font-size: 0.7rem;
 }
 
 #vertical {
   background-color: hsl(30, 100%, 50%);
-  padding: .5em 1em;
+  padding: 0.5em 1em;
   margin-top: 10px;
   font-size: 0.7rem;
 }
 
 #finish-placing {
   background-color: hsl(30, 100%, 50%);
-  padding: .5em 1em;
+  padding: 0.5em 1em;
   margin-top: 10px;
   font-size: 1rem;
 }
-
 
 .container {
   display: inline-flex;
@@ -90,38 +85,38 @@ body {
   padding-right: 30px;
   align-items: baseline;
   justify-content: center;
-  border: 3px solid #F3F3F3;
-  border-radius: .5em;
+  border: 3px solid #f3f3f3;
+  border-radius: 0.5em;
   height: 150px;
   margin-bottom: 30px;
 }
 
-
 .ship-block-ship1 {
   width: 90px;
   height: 30px;
-  opacity: 0.7
+  opacity: 0.7;
 }
 .ship-block-ship1:hover {
-  opacity: 1.0;
+  opacity: 1;
 }
 
 .ship-block-ship2 {
   width: 60px;
   height: 30px;
-  opacity: 0.7
+  opacity: 0.7;
 }
 .ship-block-ship2:hover {
-  opacity: 1.0;
+  opacity: 1;
 }
 
 .ship-block-ship3 {
   width: 30px;
   height: 30px;
-  opacity: 0.7
+  opacity: 0.7;
 }
+
 .ship-block-ship3:hover {
-  opacity: 1.0;
+  opacity: 1;
 }
 
 .ship {
@@ -129,13 +124,12 @@ body {
   padding: 10px;
 }
 
-
 .grid {
   display: flex;
   justify-content: center;
 }
 
-.playerGrid{
+.playerGrid {
   padding-right: 10px;
   padding-bottom: 0;
   width: 450px;
@@ -151,7 +145,7 @@ body {
 .pgcell {
   display: inline-block;
   border: 1px solid black;
-  background-color: #DC86FA;
+  background-color: #dc86fa;
   width: 40px;
   height: 40px;
 }
@@ -159,22 +153,21 @@ body {
 .aicell {
   display: inline-block;
   border: 1px solid black;
-  background-color: #DC86FA;
+  background-color: #dc86fa;
   width: 40px;
   height: 40px;
-
 }
 
 #start {
   background-color: hsl(30, 100%, 50%);
-  padding: .5em 1em;
+  padding: 0.5em 1em;
   margin-top: 10px;
   font-size: 1rem;
 }
 
 #replay {
   background-color: hsl(30, 100%, 50%);
-  padding: .5em 1em;
+  padding: 0.5em 1em;
   margin-top: 10px;
   font-size: 1rem;
 }
