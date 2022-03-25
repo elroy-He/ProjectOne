@@ -7,7 +7,7 @@ Battleship is a stretegy type guessing game for one or two players. It is played
 ![Screen Shot](/imgs/screenshot1.png)
 
 
-**Click [here](https://elroy-He.github.io/ProjectOne/) to play!**
+**Click [here](https://elroy-he.github.io/ProjectOne/) to play!**
 
 ## Nest Steps
 There are a handful of things I still want to work on.
