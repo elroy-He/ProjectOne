@@ -4,7 +4,7 @@ Battleship is a stretegy type guessing game for one or two players. It is played
 
 ## Wirefram & Game Screenshots
 ![Wire Frame](/imgs/wireframe.jpeg)
-![Screen Shot](/imgs/screenshot.png)
+![Screen Shot](/imgs/screenshot1.png)
 
 
 **Click [here](https://elroy-He.github.io/ProjectOne/) to play!**
@@ -12,8 +12,10 @@ Battleship is a stretegy type guessing game for one or two players. It is played
 ## Nest Steps
 There are a handful of things I still want to work on.
 * First, I want to implement a drag and drop system that allows users to drag the ships and drop them in the player grid.
-* Implementing an AI algorithm will be one of my biggest goal with this BattleShip game.
-* Refactor my code to look better
+I did find documentations on drag API but I did not have enough time during my project to understand it well.
+* Implementing an AI algorithm will be one of my biggest goal with this BattleShip game. An AI algorithm will essentially
+make the computer play smarter and thus have better chance at winning.
+* Refactor my code to look more neat.
 
 ## Technologies Used
 * HTML / CSS

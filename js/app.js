@@ -23,17 +23,20 @@ const aiGridEl = document.querySelector('.aiGrid');
  for (let row of playerGridEl.rows) {
     for(let cell of row.cells) {
       cell.setAttribute('class', 'pgcell');
+      cell.style.backgroundImage = "url('imgs/wave.png')";
+      cell.style.backgroundSize = '40px 40px';
     }
  }
 
  for (let row of aiGridEl.rows) {
    for(let cell of row.cells) {
      cell.setAttribute('class', 'aicell');
+     cell.style.backgroundImage = "url('imgs/wave.png')";
+     cell.style.backgroundSize = '40px 40px';
      }
  }
 
-const howToPlayBtn = document.querySelector('#how-to-play');
-const welcomeMessageEl = document.querySelector('#welcome-message');
+
 const startEl = document.querySelector('#start');
 const replayEl = document.querySelector('#replay');
 const gridEl = document.querySelector('.grid');
@@ -64,7 +67,6 @@ let aiShipsLeft = [];
 let messageEl = '';
 
 // Set up event listener
-howToPlayBtn.addEventListener('click', changePageWhenClicked);
 startEl.addEventListener('click', init);
 replayEl.addEventListener('click', init);
 longShipEl.addEventListener('click', changeChosenProperty);
@@ -135,8 +137,11 @@ function hitShip(e) {
       const id = parseInt((e.target.id).substring(1));
       const ind = [Math.floor(id/10) , id%10];
      if (e.target.classList.contains('takenAI')) {
-       console.dir(ind);
-        e.target.style.backgroundColor = 'black';
+        //e.target.style.backgroundColor = 'black';
+        e.target.style.backgroundImage = "url('imgs/xmark.png')";
+        e.target.style.backgroundPosition = "center";
+        e.target.style.backgroundSize = "40px 40px";
+        console.dir(e.target.src);
         let leftId = 0;
         for (var i = 0; i < aiShipsLeft.length; i++) {
           // This if statement depends on the format of your array
@@ -152,7 +157,10 @@ function hitShip(e) {
 
 
         if (document.querySelector(`#p${indeJoined}`).classList.contains('taken')) {
-          document.querySelector(`#p${indeJoined}`).style.backgroundColor = 'black';
+          //document.querySelector(`#p${indeJoined}`).style.backgroundColor = 'black';
+          document.querySelector(`#p${indeJoined}`).style.backgroundImage = "url('imgs/xmark.png')";
+          document.querySelector(`#p${indeJoined}`).style.backgroundPosition = "center";
+          document.querySelector(`#p${indeJoined}`).style.backgroundSize = "40px 40px";
           const id = parseInt((e.target.id).substring(1));
           const ind = [Math.floor(id/10) , id%10];
           const leftPId = 0;
@@ -161,19 +169,22 @@ function hitShip(e) {
                 leftPId = i;
             }
         }
-
-          playerShipsLeft.splice(leftPId, 1);
-          messageEl = 'Your ship got hit!!'
-          render();
-          console.log('playerSHipsLest');
-          console.dir(playerShipsLeft);
+        playerShipsLeft.splice(leftPId, 1);
+        messageEl = 'Your ship got hit!!'
+        render();
+        console.log('playerSHipsLest');
+        console.dir(playerShipsLeft);
         }
+
       }
 
        if(e.target.classList.contains('takenAI') === false) {
         messageEl = 'You missed'
         if (document.querySelector(`#p${indeJoined}`).classList.contains('taken')) {
-          document.querySelector(`#p${indeJoined}`).style.backgroundColor = 'black';
+          //document.querySelector(`#p${indeJoined}`).style.backgroundColor = 'black';
+          document.querySelector(`#p${indeJoined}`).style.backgroundImage = "url('imgs/xmark.png')";
+          document.querySelector(`#p${indeJoined}`).style.backgroundPosition = "center";
+          document.querySelector(`#p${indeJoined}`).style.backgroundSize = "40px 40px";
           const leftPId = playerShipsLeft.indexOf(inde);
           playerShipsLeft.splice(leftPId, 1);
           console.log('playerSHipsLest');
@@ -331,7 +342,7 @@ function addAIShips(e) {
   let size = 1;
   randInds.forEach(ind => {
     if (shipsAI[size-1].direction === 'horizontal') {
-      if(isOverlap(e) === true) {
+      if(isOverlap(e) === false) {
         let newInd = [ Math.floor(Math.random() * 6),  Math.floor(Math.random() * 6)];
         changeCellColorHorizontalAI(size, newInd);
         shipsAI[size-1].placed = true;
@@ -339,14 +350,11 @@ function addAIShips(e) {
         size++;
         //continue for to check hit or sunk
       } else {
-        changeCellColorHorizontalAI(size, ind);
-        shipsAI[size-1].placed = true;
-        shipsAI[size-1].firstIndex = ind;
-        size++;
+        return;
       }
     }
      else if (shipsAI[size-1].direction === 'vertical') {
-      if(isOverlap(e) === true) {
+      if(isOverlap(e) === false) {
         let newInd = [ Math.floor(Math.random() * 7),  Math.floor(Math.random() * 7)];
         changeCellColorVerticalAI(size, newInd);
         shipsAI[size-1].placed = true;
@@ -354,26 +362,25 @@ function addAIShips(e) {
         size++;
         //continue for to check hit or sunk
       } else {
-        changeCellColorVerticalAI(size, ind);
-        shipsAI[size-1].placed = true;
-        shipsAI[size-1].firstIndex = ind;
-        //document.querySelector()
-        size++;
+
+        return;
       }
     }
   });
 
-  for (let row of playerGridEl.rows) {
-    for(let cell of row.cells) {
-      //cell.setAttribute('class', 'pgcell');
-      cell.style.backgroundColor = 'brown';
-    }
- }
+//   for (let row of playerGridEl.rows) {
+//     for(let cell of row.cells) {
+//       //cell.setAttribute('class', 'pgcell');
+//       // cell.style.backgroundImage = "url('imgs/oceannew.png')";
+//       // cell.style.backgroundSize = '40px 40px';
+//     }
+//  }
 
  for (let row of aiGridEl.rows) {
    for(let cell of row.cells) {
      //cell.setAttribute('class', 'aicell');
-     cell.style.backgroundColor = 'brown';
+      cell.style.backgroundImage = "url('imgs/wave.png')";
+      cell.style.backgroundSize = '40px 40px';
      }
  }
   finishPlacingEl.disabled = true;
@@ -427,7 +434,8 @@ function changeCellColorHorizontal(num, index) {
     indexArr.forEach(ind => {
       const idName = ind.join('');
       const text = idName.toString();
-      document.querySelector(`#p${text}`).style.backgroundColor = 'blue';
+      document.querySelector(`#p${text}`).style.backgroundImage = "url('imgs/ship.png')";
+      document.querySelector(`#p${text}`).style.backgroundSize = "40px 40px";
       document.querySelector(`#p${text}`).classList.add('taken');
     });
 
@@ -443,7 +451,8 @@ function changeCellColorHorizontal(num, index) {
       const idName = ind.join('');
 
       const text = idName.toString();
-      document.querySelector(`#p${text}`).style.backgroundColor = 'blue';
+      document.querySelector(`#p${text}`).style.backgroundImage = "url('imgs/ship.png')";
+      document.querySelector(`#p${text}`).style.backgroundSize = "40px 40px";
       document.querySelector(`#p${text}`).classList.add('taken');
     });
   }
@@ -452,7 +461,8 @@ function changeCellColorHorizontal(num, index) {
     // indexArr.push(index);
     const indexName = index.join('');
     const text = indexName.toString();
-    document.querySelector(`#p${text}`).style.backgroundColor = 'blue';
+    document.querySelector(`#p${text}`).style.backgroundImage = "url('imgs/ship.png')";
+    document.querySelector(`#p${text}`).style.backgroundSize = "40px 40px";
     document.querySelector(`#p${text}`).classList.add('taken');
     playerShipInds.push(index);
   }
@@ -477,6 +487,7 @@ function changeCellColorHorizontalAI(num, index) {
     indexArr.forEach(index => {
       const idName = index.join('');
       const text = idName.toString();
+      document.querySelector(`#a${text}`).style.backgroundImage = "url('imgs/ship.png')";
       document.querySelector(`#a${text}`).classList.add('takenAI');
     });
     aiShipInds.push(index);
@@ -492,7 +503,7 @@ function changeCellColorHorizontalAI(num, index) {
       const idName = index.join('');
       const text = idName.toString();
 
-      document.querySelector(`#a${text}`).style.backgroundColor = 'red';
+      document.querySelector(`#a${text}`).style.backgroundImage = "url('imgs/ship.png')";
       document.querySelector(`#a${text}`).classList.add('takenAI');
     });
       aiShipInds.push(index);
@@ -502,7 +513,7 @@ function changeCellColorHorizontalAI(num, index) {
   if ( num === 1) {
     const indexName = index.join('');
     const text = indexName.toString();
-    document.querySelector(`#a${text}`).style.backgroundColor = 'red';
+    document.querySelector(`#a${text}`).style.backgroundImage = "url('imgs/ship.png')";
     document.querySelector(`#a${text}`).classList.add('takenAI');
     aiShipInds.push(index);
   }
@@ -526,7 +537,8 @@ function changeCellColorVertical(num, index) {
     indexArr.forEach(index => {
       const idName = index.join('');
       const text = idName.toString();
-      document.querySelector(`#p${text}`).style.backgroundColor = 'blue';
+      document.querySelector(`#p${text}`).style.backgroundImage = "url('imgs/ship.png')";
+      document.querySelector(`#p${text}`).style.backgroundSize = "40px 40px";
       document.querySelector(`#p${text}`).classList.add('taken');
   });
       playerShipInds.push(index);
@@ -541,7 +553,8 @@ function changeCellColorVertical(num, index) {
     indexArr.forEach(index => {
       const idName = index.join('');
       const text = idName.toString();
-      document.querySelector(`#p${text}`).style.backgroundColor = 'blue';
+      document.querySelector(`#p${text}`).style.backgroundImage = "url('imgs/ship.png')";
+      document.querySelector(`#p${text}`).style.backgroundSize = "40px 40px";
       document.querySelector(`#p${text}`).classList.add('taken');
     });
       playerShipInds.push(index);
@@ -551,7 +564,8 @@ function changeCellColorVertical(num, index) {
   if ( num === 1) {
     const indexName = index.join('');
     const text = indexName.toString();
-    document.querySelector(`#p${text}`).style.backgroundColor = 'blue';
+    document.querySelector(`#p${text}`).style.backgroundImage = "url('imgs/ship.png')";
+    document.querySelector(`#p${text}`).style.backgroundSize = "40px 40px";
     document.querySelector(`#p${text}`).classList.add('taken');
     playerShipInds.push(index);
   }
@@ -575,7 +589,7 @@ function changeCellColorVerticalAI(num, index) {
     indexArr.forEach(index => {
       const idName = index.join('');
       const text = idName.toString();
-      document.querySelector(`#a${text}`).style.backgroundColor = 'red';
+      document.querySelector(`#a${text}`).style.backgroundImage = "url('imgs/ship.png')";
       document.querySelector(`#a${text}`).classList.add('takenAI');
     });
     aiShipInds.push(index);
@@ -590,7 +604,7 @@ function changeCellColorVerticalAI(num, index) {
     indexArr.forEach(index => {
       const idName = index.join('');
       const text = idName.toString();
-      document.querySelector(`#a${text}`).style.backgroundColor = 'red';
+      document.querySelector(`#a${text}`).style.backgroundImage = "url('imgs/ship.png')";
       document.querySelector(`#a${text}`).classList.add('takenAI');
     });
     aiShipInds.push(index);
@@ -600,7 +614,7 @@ function changeCellColorVerticalAI(num, index) {
   if ( num === 1) {
     const indexName = index.join('');
     const text = indexName.toString();
-    document.querySelector(`#a${text}`).style.backgroundColor = 'red';
+    document.querySelector(`#a${text}`).style.backgroundImage = "url('imgs/ship.png')";
     document.querySelector(`#a${text}`).classList.add('takenAI');
     aiShipInds.push(index);
   }
@@ -657,20 +671,21 @@ function rndIndGenerator() {
 
 
 function init() {
-  welcomeMessageEl.id = 'welcome-message';
 
  for (let row of playerGridEl.rows)
  {
      for(let cell of row.cells)
      {
-      cell.style.backgroundColor = '#027910';
+      cell.style.backgroundImage = "url('imgs/wave.png')";
+      cell.style.backgroundSize = '40px 40px';
       cell.classList.remove('taken');
      }
  }
 
  for (let row of aiGridEl.rows) {
    for(let cell of row.cells) {
-    cell.style.backgroundColor = '#027910';
+    cell.style.backgroundImage = "url('imgs/wave.png')";
+    cell.style.backgroundSize = '40px 40px';
     cell.classList.remove('takenAI');
      }
  }
@@ -706,9 +721,3 @@ function handleReplayBtn(e) {
   init();
 }
 
-function changePageWhenClicked(e) {
-  welcomeMessageEl.id = 'game-instruction';
-  welcomeMessageEl.innerHTML = "To start the game, please press START button ";
-  welcomeMessageEl.style.color = 'purple';
-  welcomeMessageEl.style.fontSize = '25px';
-}
