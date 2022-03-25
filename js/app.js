@@ -141,7 +141,6 @@ function hitShip(e) {
         e.target.style.backgroundImage = "url('imgs/xmark.png')";
         e.target.style.backgroundPosition = "center";
         e.target.style.backgroundSize = "40px 40px";
-        console.dir(e.target.src);
         let leftId = 0;
         for (var i = 0; i < aiShipsLeft.length; i++) {
           // This if statement depends on the format of your array
@@ -247,7 +246,6 @@ function addShip(e) {
   ind.splice(0,1);
   ind[0] = parseInt(ind[0]);
   ind[1] = parseInt(ind[1]);
-  console.log(ind);
 
   if(isOverlap(e)) {
     messageEl = 'Overlapped !';
@@ -329,7 +327,6 @@ function addShip(e) {
   }
 }
 
-//console.dir(rndIndGenerator());
 function addAIShips(e) {
   shipsAI.forEach( ship => {
     const num = Math.floor(Math.random() * 2);
@@ -337,21 +334,20 @@ function addAIShips(e) {
   });
 
   let randInds = rndIndGenerator();
-  console.log(randInds);
 
   let size = 1;
   randInds.forEach(ind => {
     if (shipsAI[size-1].direction === 'horizontal') {
-      if(isOverlap(e) === false) {
+      //if(isOverlap(e) === false) {
         let newInd = [ Math.floor(Math.random() * 6),  Math.floor(Math.random() * 6)];
         changeCellColorHorizontalAI(size, newInd);
         shipsAI[size-1].placed = true;
         shipsAI[size-1].firstIndex = newInd;
         size++;
         //continue for to check hit or sunk
-      } else {
-        return;
-      }
+      //} else {
+      //  return;
+
     }
      else if (shipsAI[size-1].direction === 'vertical') {
       if(isOverlap(e) === false) {
@@ -361,12 +357,13 @@ function addAIShips(e) {
         shipsAI[size-1].firstIndex = newInd;
         size++;
         //continue for to check hit or sunk
-      } else {
+      //} else {
 
-        return;
+       // return;
       }
     }
   });
+
 
 //   for (let row of playerGridEl.rows) {
 //     for(let cell of row.cells) {
@@ -517,7 +514,6 @@ function changeCellColorHorizontalAI(num, index) {
     document.querySelector(`#a${text}`).classList.add('takenAI');
     aiShipInds.push(index);
   }
-  console.dir(aiShipInds);
 }
 
 function changeCellColorVertical(num, index) {
